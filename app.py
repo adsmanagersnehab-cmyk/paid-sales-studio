@@ -297,7 +297,7 @@ st.markdown("""
         box-shadow: 0 6px 24px rgba(99, 102, 241, 0.55) !important;
     }
     
-    /* ANCHOR DOWNLOAD BUTTONS TO TOP-RIGHT ONLY (NEVER OVERFLOW ON LAPTOPS) */
+    /* ANCHOR DOWNLOAD BUTTONS TO TOP-RIGHT ONLY */
     div[data-testid="stDownloadButton"] {
         display: flex !important;
         justify-content: flex-end !important;
@@ -375,6 +375,27 @@ st.markdown("""
         margin-bottom: 15px;
         opacity: 0.5;
     }
+    
+    /* RADAR & SPEC WIDGET STYLING */
+    .radar-box {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 14px 18px;
+        margin-bottom: 12px;
+    }
+    .radar-zone {
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .zone-red { background: rgba(244, 63, 94, 0.12); color: #fb7185; border-left: 3px solid #f43f5e; }
+    .zone-green { background: rgba(16, 185, 129, 0.12); color: #34d399; border-left: 3px solid #10b981; }
     
     @media (max-width: 768px) {
         .top-navbar {
@@ -784,7 +805,6 @@ with nav_tab1:
         )
 
     if uploaded_imgs or uploaded_csv:
-        # FLAWLESS PYTHON 3-COLUMN CENTERING
         _, c_btn1, _ = st.columns([1, 2, 1])
         with c_btn1:
             btn_audit = st.button("🚀 EXECUTE AUTO-DETECTION & AUDIT")
@@ -1438,7 +1458,7 @@ with nav_tab2:
         """, unsafe_allow_html=True)
 
 # ==============================================================================
-# TAB 3: CREATIVE SCORING & SAFE-ZONE STUDIO (100% CENTERED BUTTONS)
+# TAB 3: CREATIVE SCORING & SAFE-ZONE STUDIO (PERFECTLY BALANCED COLUMNS)
 # ==============================================================================
 with nav_tab3:
     st.markdown("#### 🎨 Creative Scoring & Safe-Zone Studio")
@@ -1466,14 +1486,15 @@ with nav_tab3:
         file_ext = creative_file.name.split('.')[-1].lower()
         is_video = file_ext in ['mp4', 'mov']
         
-        preview_col, info_col = st.columns([1, 2])
+        # PERFECTLY BALANCED 1:1.3 COLUMN RATIO TO ELIMINATE VOID
+        preview_col, info_col = st.columns([1, 1.3])
         
         with preview_col:
-            st.markdown("##### 👁️ Creative Preview")
+            st.markdown("##### 👁️ Creative Asset Preview")
             if is_video:
                 st.video(creative_file)
                 detected_ratio = "9:16 Vertical Video" if "9:16" in intended_placement else "Standard Video"
-                res_info = "Video Asset Loaded"
+                res_info = "Video Stream Loaded"
             else:
                 img_obj = Image.open(creative_file)
                 st.image(img_obj, use_container_width=True)
@@ -1491,22 +1512,59 @@ with nav_tab3:
                     detected_ratio = f"{w}x{h} (Ratio {calc_ratio})"
                 res_info = f"{w} × {h} px"
 
+        # DENSE, INFORMATIVE SAAS COCKPIT (NO EMPTY SPACE)
         with info_col:
-            st.markdown("##### 📐 Auto-Inspected Technical Attributes")
+            st.markdown("##### 📐 Technical Specs & Safe-Zone Radar")
+            
+            # WIDGET 1: ASSET ATTRIBUTES GRID
             c_attr1, c_attr2 = st.columns(2)
             with c_attr1:
-                st.markdown(f"• **Asset Name:** `{creative_file.name}`")
-                st.markdown(f"• **Aspect Ratio:** `{detected_ratio}`")
+                st.markdown(f"""
+                <div class="radar-box" style="padding:10px 14px;">
+                    <span class="kpi-lbl">Asset Identifier</span>
+                    <div style="font-weight:700; font-size:12px; margin-top:2px;">{creative_file.name[:25]}</div>
+                    <span class="kpi-lbl" style="margin-top:8px; display:block;">Aspect Ratio</span>
+                    <div style="font-weight:800; color:#818cf8; font-size:14px;">{detected_ratio}</div>
+                </div>
+                """, unsafe_allow_html=True)
             with c_attr2:
-                st.markdown(f"• **Dimensions:** `{res_info}`")
-                st.markdown(f"• **Placement Target:** `{intended_placement.split(' ')[1]}`")
-                
+                st.markdown(f"""
+                <div class="radar-box" style="padding:10px 14px;">
+                    <span class="kpi-lbl">Resolution Matrix</span>
+                    <div style="font-weight:700; font-size:12px; margin-top:2px;">{res_info}</div>
+                    <span class="kpi-lbl" style="margin-top:8px; display:block;">Target Placement</span>
+                    <div style="font-weight:800; color:#34d399; font-size:14px;">{intended_placement.split(' ')[1]}</div>
+                </div>
+                """, unsafe_allow_html=True)
+
+            # WIDGET 2: VISUAL SAFE-ZONE RADAR MAP
             st.markdown("""
-            <div style="background:rgba(15,23,42,0.6); border:1px dashed rgba(255,255,255,0.15); border-radius:10px; padding:12px; font-size:12px; line-height:1.6; margin-top:10px;">
-                <b>🛡️ Meta & Google Safe-Zone Rules:</b><br>
-                • <b>Top 14% Zone:</b> Must keep clear of critical text (covered by brand avatar & top bar).<br>
-                • <b>Bottom 20% Zone:</b> Must keep clear of text/offers (covered by CTA button, account name & audio ticker).<br>
-                • <b>Visual Contrast:</b> Ensure headline text has background pill/stroke for 100% mobile readability.
+            <div class="radar-box">
+                <span class="kpi-lbl" style="color:#cbd5e1; margin-bottom:8px; display:block;">🛡️ Mobile Safe-Zone Visual Grid</span>
+                <div class="radar-zone zone-red">
+                    <span>⛔ Top 14% Dead-Zone (0 - 268px)</span>
+                    <span>Brand Avatar & Handle</span>
+                </div>
+                <div class="radar-zone zone-green">
+                    <span>✅ Center 66% Golden Zone (268 - 1536px)</span>
+                    <span>Primary Safe Zone (Text & Dress)</span>
+                </div>
+                <div class="radar-zone zone-red">
+                    <span>⛔ Bottom 20% Dead-Zone (1536 - 1920px)</span>
+                    <span>CTA Button & Audio Wave</span>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            # WIDGET 3: LIVE PRE-AUDIT QUALITY CHECKLIST
+            st.markdown("""
+            <div class="radar-box" style="margin-bottom:0;">
+                <span class="kpi-lbl" style="color:#cbd5e1; margin-bottom:6px; display:block;">⚡ D2C Conversion Pre-Check</span>
+                <div style="font-size:11px; line-height:1.7; color:#94a3b8;">
+                    • <b>Thumbstop Window:</b> First 2 seconds must interrupt feed scroll.<br>
+                    • <b>Mute Readability:</b> 70%+ users watch without sound; bold text is mandatory.<br>
+                    • <b>Contrast Rule:</b> Text overlay must have solid background pill/stroke.
+                </div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -1613,7 +1671,7 @@ with nav_tab3:
                 st.markdown(f"<li style='margin-bottom:4px;'>{imp}</li>", unsafe_allow_html=True)
             st.markdown("</ul></div>", unsafe_allow_html=True)
 
-        # 3-COLUMN PYTHON GRID FOR BULLETPROOF CENTERING
+        # CENTERED REDESIGN BUTTON
         st.markdown("---")
         st.markdown("<div style='text-align:center;'><h5>⚡ Auto-Redesign & Maximum Compliance Engine</h5><p style='color:#94a3b8; font-size:12px;'>Re-engineer on-screen hook & overlay text into verified safe zones for maximum compliance:</p></div>", unsafe_allow_html=True)
 
