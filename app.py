@@ -113,7 +113,7 @@ D2C_CATEGORIES = {
     }
 }
 
-# --- ULTRA SAAS DESIGN SYSTEM WITH 100% CENTERED BUTTONS ---
+# --- ULTRA SAAS DESIGN SYSTEM WITH FLAWLESS CENTERED BUTTONS ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
@@ -269,7 +269,7 @@ st.markdown("""
         align-items: center !important;
         width: 100% !important;
         text-align: center !important;
-        margin: 16px auto !important;
+        margin: 12px auto !important;
     }
     div[data-testid="stButton"] > button {
         display: inline-flex !important;
@@ -297,7 +297,7 @@ st.markdown("""
         box-shadow: 0 6px 24px rgba(99, 102, 241, 0.55) !important;
     }
     
-    /* ANCHOR DOWNLOAD BUTTONS TO TOP-RIGHT ONLY (NEVER CUTS OFF) */
+    /* ANCHOR DOWNLOAD BUTTONS TO TOP-RIGHT ONLY (NEVER OVERFLOW ON LAPTOPS) */
     div[data-testid="stDownloadButton"] {
         display: flex !important;
         justify-content: flex-end !important;
@@ -492,7 +492,7 @@ def read_spreadsheet_robust(uploaded_file):
         
     return df
 
-# --- PERMANENT BULLETPROOF CALLER ---
+# --- PERMANENT BULLETPROOF CALLER (NO 1.5, NO 2.0, NO TTS) ---
 def call_gemini_dynamic(prompt, parts_payload=[]):
     if not api_key_pool:
         raise ValueError("Please enter your Gemini API Key in the left sidebar.")
@@ -784,7 +784,10 @@ with nav_tab1:
         )
 
     if uploaded_imgs or uploaded_csv:
-        btn_audit = st.button("🚀 EXECUTE AUTO-DETECTION & AUDIT")
+        # FLAWLESS PYTHON 3-COLUMN CENTERING
+        _, c_btn1, _ = st.columns([1, 2, 1])
+        with c_btn1:
+            btn_audit = st.button("🚀 EXECUTE AUTO-DETECTION & AUDIT")
         
         if btn_audit:
             if not active_api_key:
@@ -873,7 +876,6 @@ with nav_tab1:
 
         st.markdown("<div style='margin-top:25px;'></div>", unsafe_allow_html=True)
         
-        # Responsive Header Bar with Anchored Top-Right Download
         t_c1, t_c2 = st.columns([1.6, 1.4])
         with t_c1:
             st.markdown(f"""
@@ -951,6 +953,7 @@ with nav_tab1:
                 fig_c.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", height=380)
                 st.plotly_chart(fig_c, use_container_width=True)
 
+        # --- FORECASTING SUITE ---
         with aud_t3:
             st.markdown("#### 🔮 Horizon Forecasting Suite (1D, 3D, 7D, 15D, 30D, 90D)")
             st.caption("Forecasting future revenue, target order volumes, and inventory requirements based on active run-rate:")
@@ -1042,6 +1045,9 @@ with nav_tab1:
             </div>
             """, unsafe_allow_html=True)
 
+        # ==============================================================================
+        # TAB 5: ROAS BLUEPRINT (PERFECTLY CENTERED ACTION BUTTON)
+        # ==============================================================================
         with aud_t5:
             roas_target_tier = st.radio(
                 "Select Target ROAS Milestone to Scale:",
@@ -1101,7 +1107,6 @@ with nav_tab1:
             if is_google_active:
                 strategy_export_content += f"=== GOOGLE ADS LEVERS ===\n{google_strategy_dict[active_tier_key]}\n"
 
-            # Top Header Bar for ROAS Blueprint with Anchored Download
             roas_hdr_col1, roas_hdr_col2 = st.columns([1.6, 1.4])
             with roas_hdr_col1:
                 st.markdown(f"#### 🚀 Target ROAS Multiplier Engine ({req_roas}X Target)")
@@ -1158,7 +1163,10 @@ with nav_tab1:
                     </div>
                     """, unsafe_allow_html=True)
 
-            btn_live_tactical = st.button("⚡ GENERATE AI LIVE TACTICAL AUDIT FOR THIS ROAS TARGET")
+            # 3-COLUMN PYTHON GRID FOR BULLETPROOF CENTERING
+            _, c_btn_tactical, _ = st.columns([1, 2, 1])
+            with c_btn_tactical:
+                btn_live_tactical = st.button("⚡ GENERATE AI LIVE TACTICAL AUDIT FOR THIS ROAS TARGET")
 
             if btn_live_tactical:
                 if not active_api_key:
@@ -1311,7 +1319,10 @@ with nav_tab2:
         "cvr": b_cvr
     }
 
-    btn_copy_gen = st.button(f"⚡ GENERATE STEP-BY-STEP SETTINGS & AD ASSETS FOR {platform_choice.split(' ')[1].upper()}")
+    # 3-COLUMN PYTHON GRID FOR BULLETPROOF CENTERING
+    _, c_btn_copy, _ = st.columns([1, 2, 1])
+    with c_btn_copy:
+        btn_copy_gen = st.button(f"⚡ GENERATE STEP-BY-STEP SETTINGS & AD ASSETS FOR {platform_choice.split(' ')[1].upper()}")
 
     if btn_copy_gen:
         if not active_api_key:
@@ -1427,7 +1438,7 @@ with nav_tab2:
         """, unsafe_allow_html=True)
 
 # ==============================================================================
-# TAB 3: CREATIVE SCORING & SAFE-ZONE STUDIO (PERFECTLY CENTERED BUTTONS)
+# TAB 3: CREATIVE SCORING & SAFE-ZONE STUDIO (100% CENTERED BUTTONS)
 # ==============================================================================
 with nav_tab3:
     st.markdown("#### 🎨 Creative Scoring & Safe-Zone Studio")
@@ -1499,7 +1510,10 @@ with nav_tab3:
             </div>
             """, unsafe_allow_html=True)
 
-        btn_audit_cr = st.button("🚀 AUDIT CREATIVE COMPLIANCE & SCORE PERFORMANCE")
+        # 3-COLUMN PYTHON GRID FOR BULLETPROOF CENTERING
+        _, c_btn_audit_cr, _ = st.columns([1, 2, 1])
+        with c_btn_audit_cr:
+            btn_audit_cr = st.button("🚀 AUDIT CREATIVE COMPLIANCE & SCORE PERFORMANCE")
 
         if btn_audit_cr:
             if not active_api_key:
@@ -1599,11 +1613,13 @@ with nav_tab3:
                 st.markdown(f"<li style='margin-bottom:4px;'>{imp}</li>", unsafe_allow_html=True)
             st.markdown("</ul></div>", unsafe_allow_html=True)
 
-        # CENTERED REDESIGN BUTTON
+        # 3-COLUMN PYTHON GRID FOR BULLETPROOF CENTERING
         st.markdown("---")
         st.markdown("<div style='text-align:center;'><h5>⚡ Auto-Redesign & Maximum Compliance Engine</h5><p style='color:#94a3b8; font-size:12px;'>Re-engineer on-screen hook & overlay text into verified safe zones for maximum compliance:</p></div>", unsafe_allow_html=True)
 
-        btn_redesign = st.button("✨ REDESIGN TEXT & OPTIMIZE FOR MAXIMUM SCORE")
+        _, c_btn_redesign, _ = st.columns([1, 2, 1])
+        with c_btn_redesign:
+            btn_redesign = st.button("✨ REDESIGN TEXT & OPTIMIZE FOR MAXIMUM SCORE")
 
         if btn_redesign:
             if not active_api_key:
