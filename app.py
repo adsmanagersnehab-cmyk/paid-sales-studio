@@ -113,7 +113,7 @@ D2C_CATEGORIES = {
     }
 }
 
-# --- ULTRA SAAS STYLING: CENTERED BUTTONS & SAFE TOP-RIGHT DOWNLOAD BUTTONS ---
+# --- ULTRA SAAS DESIGN SYSTEM WITH 100% CENTERED BUTTONS ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
@@ -262,41 +262,48 @@ st.markdown("""
         line-height: 1.6;
     }
     
-    /* CENTERED GLOWING ACTION BUTTONS (COMPACT PILL) */
-    .stButton {
+    /* 100% BULLETPROOF CENTER ALIGNMENT FOR ALL ACTION BUTTONS */
+    div[data-testid="stButton"] {
         display: flex !important;
         justify-content: center !important;
+        align-items: center !important;
         width: 100% !important;
-        margin: 12px 0 !important;
+        text-align: center !important;
+        margin: 16px auto !important;
     }
-    .stButton > button {
+    div[data-testid="stButton"] > button {
+        display: inline-flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        margin: 0 auto !important;
         border-radius: 9999px !important;
         font-family: 'Outfit', sans-serif !important;
         font-weight: 700 !important;
         font-size: 13px !important;
         letter-spacing: 0.03em !important;
-        padding: 9px 28px !important;
-        background: rgba(99, 102, 241, 0.15) !important;
+        padding: 10px 30px !important;
+        background: rgba(99, 102, 241, 0.14) !important;
         color: #a5b4fc !important;
         border: 1.5px solid #6366f1 !important;
-        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25) !important;
+        box-shadow: 0 4px 18px rgba(99, 102, 241, 0.25) !important;
         transition: all 0.25s ease !important;
         width: auto !important;
     }
-    .stButton > button:hover {
+    div[data-testid="stButton"] > button:hover {
         transform: translateY(-1px) !important;
         background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
         color: #ffffff !important;
         border-color: #818cf8 !important;
-        box-shadow: 0 6px 22px rgba(99, 102, 241, 0.55) !important;
+        box-shadow: 0 6px 24px rgba(99, 102, 241, 0.55) !important;
     }
     
-    /* TOP-RIGHT ANCHORED DOWNLOAD BUTTONS (NEVER OVERFLOW ON LAPTOPS) */
+    /* ANCHOR DOWNLOAD BUTTONS TO TOP-RIGHT ONLY (NEVER CUTS OFF) */
     div[data-testid="stDownloadButton"] {
         display: flex !important;
         justify-content: flex-end !important;
         align-items: center !important;
         width: 100% !important;
+        margin: 0 !important;
     }
     div[data-testid="stDownloadButton"] > button {
         border-radius: 9999px !important;
@@ -446,7 +453,7 @@ def extract_json(text):
     match = re.search(r'\{.*\}', text, re.DOTALL)
     return match.group(0) if match else text
 
-# --- ROBUST CSV & EXCEL PARSER (HANDLES UTF-16, BOM & GOOGLE ADS METADATA ROWS) ---
+# --- ROBUST CSV & EXCEL PARSER ---
 def read_spreadsheet_robust(uploaded_file):
     uploaded_file.seek(0)
     file_name = uploaded_file.name.lower()
@@ -470,7 +477,6 @@ def read_spreadsheet_robust(uploaded_file):
         
     lines = text.splitlines()
     header_idx = 0
-    # Search first 10 lines for real header row (Skips Google Ads top report title lines)
     for idx, line in enumerate(lines[:10]):
         lower_line = line.lower()
         if any(col in lower_line for col in ['campaign', 'ad name', 'ad set', 'impressions', 'clicks', 'cost', 'spend', 'conversions']):
@@ -750,7 +756,7 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# --- WORKSPACE TABS WITH SMOOTH BUTTON PILL DESIGN (NOW 3 MAIN TABS) ---
+# --- WORKSPACE TABS WITH SMOOTH BUTTON PILL DESIGN ---
 nav_tab1, nav_tab2, nav_tab3 = st.tabs([
     "📸 Vision & Report Auditor (Meta + Google Auto-Detect)",
     "🎯 Ad Copy Studio & Financial Simulator (Manual + A4 PDF)",
@@ -778,9 +784,7 @@ with nav_tab1:
         )
 
     if uploaded_imgs or uploaded_csv:
-        st.markdown("<div style='display:flex; justify-content:center; margin:15px 0;'>", unsafe_allow_html=True)
         btn_audit = st.button("🚀 EXECUTE AUTO-DETECTION & AUDIT")
-        st.markdown("</div>", unsafe_allow_html=True)
         
         if btn_audit:
             if not active_api_key:
@@ -870,7 +874,7 @@ with nav_tab1:
         st.markdown("<div style='margin-top:25px;'></div>", unsafe_allow_html=True)
         
         # Responsive Header Bar with Anchored Top-Right Download
-        t_c1, t_c2 = st.columns([1.7, 1.3])
+        t_c1, t_c2 = st.columns([1.6, 1.4])
         with t_c1:
             st.markdown(f"""
             <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
@@ -1038,9 +1042,6 @@ with nav_tab1:
             </div>
             """, unsafe_allow_html=True)
 
-        # ==============================================================================
-        # TAB 5: ROAS BLUEPRINT (ANCHORED TOP-RIGHT DOWNLOAD & CENTERED ACTION BUTTON)
-        # ==============================================================================
         with aud_t5:
             roas_target_tier = st.radio(
                 "Select Target ROAS Milestone to Scale:",
@@ -1101,10 +1102,10 @@ with nav_tab1:
                 strategy_export_content += f"=== GOOGLE ADS LEVERS ===\n{google_strategy_dict[active_tier_key]}\n"
 
             # Top Header Bar for ROAS Blueprint with Anchored Download
-            roas_hdr_col1, roas_hdr_col2 = st.columns([1.7, 1.3])
+            roas_hdr_col1, roas_hdr_col2 = st.columns([1.6, 1.4])
             with roas_hdr_col1:
                 st.markdown(f"#### 🚀 Target ROAS Multiplier Engine ({req_roas}X Target)")
-                st.caption(f"Active Sensed Channel: **{det_plat}** (Showing active levers for detected channel, inactive channel set to OFF)")
+                st.caption(f"Active Channel: **{det_plat}** (Showing active levers for detected channel, inactive channel set to OFF)")
             with roas_hdr_col2:
                 strat_html = generate_roas_strategy_html(roas_target_tier, req_roas, req_cpa, current_aov, det_plat, strategy_export_content)
                 st.download_button(
@@ -1157,9 +1158,7 @@ with nav_tab1:
                     </div>
                     """, unsafe_allow_html=True)
 
-            st.markdown("<div style='display:flex; justify-content:center; margin:16px 0;'>", unsafe_allow_html=True)
             btn_live_tactical = st.button("⚡ GENERATE AI LIVE TACTICAL AUDIT FOR THIS ROAS TARGET")
-            st.markdown("</div>", unsafe_allow_html=True)
 
             if btn_live_tactical:
                 if not active_api_key:
@@ -1196,7 +1195,7 @@ with nav_tab1:
             if "live_tactical_plan" in st.session_state:
                 st.markdown("<div style='margin-top:20px;'></div>", unsafe_allow_html=True)
                 
-                tac_bar_c1, tac_bar_c2 = st.columns([1.7, 1.3])
+                tac_bar_c1, tac_bar_c2 = st.columns([1.6, 1.4])
                 with tac_bar_c1:
                     st.markdown(f"<h5 style='color:#818cf8; margin:0;'>⚡ TACTICAL PROTOCOL FOR {st.session_state['live_tactical_roas']}X ROAS SCALING ({st.session_state['live_tactical_plat'].upper()})</h5>", unsafe_allow_html=True)
                 with tac_bar_c2:
@@ -1312,10 +1311,7 @@ with nav_tab2:
         "cvr": b_cvr
     }
 
-    # CENTERED GLOWING ACTION BUTTON
-    st.markdown("<div style='display:flex; justify-content:center; margin:16px 0;'>", unsafe_allow_html=True)
     btn_copy_gen = st.button(f"⚡ GENERATE STEP-BY-STEP SETTINGS & AD ASSETS FOR {platform_choice.split(' ')[1].upper()}")
-    st.markdown("</div>", unsafe_allow_html=True)
 
     if btn_copy_gen:
         if not active_api_key:
@@ -1323,7 +1319,6 @@ with nav_tab2:
         else:
             with st.spinner(f"✍️ Connecting to Google live engine to build campaign architecture & ad copy for {platform_choice}..."):
                 try:
-                    # STRICT SEPARATION BETWEEN META ADS AND GOOGLE ADS TO PREVENT MIXING
                     if "Google" in platform_choice:
                         prompt_framework = f"""
                         TASK FOR GOOGLE ADS ONLY:
@@ -1369,7 +1364,7 @@ with nav_tab2:
                         - 1 Reassuring Description (<90 characters).
                         - Recommended CTA Button & Creative Staging Tips.
                         """
-                    else: # Omnichannel
+                    else:
                         prompt_framework = f"""
                         TASK FOR OMNICHANNEL SUITE:
                         Provide BOTH complete Meta Ads architecture & copy AND Google Ads architecture & copy in distinct, completely separate sections!
@@ -1404,8 +1399,7 @@ with nav_tab2:
     if "generated_ad_copy" in st.session_state:
         st.markdown("<div style='margin-top:25px;'></div>", unsafe_allow_html=True)
         
-        # Responsive Header Bar with Anchored Top-Right Download (Never Overflows)
-        pdf_c1, pdf_c2 = st.columns([1.7, 1.3])
+        pdf_c1, pdf_c2 = st.columns([1.6, 1.4])
         with pdf_c1:
             st.markdown(f"##### 📝 Deployment-Ready Asset Deck ({st.session_state.get('last_platform_choice', 'Ad Copy')})")
         with pdf_c2:
@@ -1433,7 +1427,7 @@ with nav_tab2:
         """, unsafe_allow_html=True)
 
 # ==============================================================================
-# TAB 3: CREATIVE SCORING & SAFE-ZONE STUDIO (BORDERED PILL BUTTONS)
+# TAB 3: CREATIVE SCORING & SAFE-ZONE STUDIO (PERFECTLY CENTERED BUTTONS)
 # ==============================================================================
 with nav_tab3:
     st.markdown("#### 🎨 Creative Scoring & Safe-Zone Studio")
@@ -1505,9 +1499,7 @@ with nav_tab3:
             </div>
             """, unsafe_allow_html=True)
 
-        st.markdown("<div style='display:flex; justify-content:center; margin:16px 0;'>", unsafe_allow_html=True)
         btn_audit_cr = st.button("🚀 AUDIT CREATIVE COMPLIANCE & SCORE PERFORMANCE")
-        st.markdown("</div>", unsafe_allow_html=True)
 
         if btn_audit_cr:
             if not active_api_key:
@@ -1611,9 +1603,7 @@ with nav_tab3:
         st.markdown("---")
         st.markdown("<div style='text-align:center;'><h5>⚡ Auto-Redesign & Maximum Compliance Engine</h5><p style='color:#94a3b8; font-size:12px;'>Re-engineer on-screen hook & overlay text into verified safe zones for maximum compliance:</p></div>", unsafe_allow_html=True)
 
-        st.markdown("<div style='display:flex; justify-content:center; margin:16px 0;'>", unsafe_allow_html=True)
         btn_redesign = st.button("✨ REDESIGN TEXT & OPTIMIZE FOR MAXIMUM SCORE")
-        st.markdown("</div>", unsafe_allow_html=True)
 
         if btn_redesign:
             if not active_api_key:
@@ -1663,7 +1653,7 @@ with nav_tab3:
         if "creative_redesign_text" in st.session_state:
             st.markdown("<div style='margin-top:20px;'></div>", unsafe_allow_html=True)
             
-            rd_col1, rd_col2 = st.columns([1.7, 1.3])
+            rd_col1, rd_col2 = st.columns([1.6, 1.4])
             with rd_col1:
                 st.markdown("##### 🚀 Optimized & Re-Engineered Creative Blueprint")
             with rd_col2:
