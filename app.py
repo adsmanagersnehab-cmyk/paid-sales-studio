@@ -269,7 +269,7 @@ st.markdown("""
         font-weight: 700 !important;
         font-size: 13px !important;
         letter-spacing: 0.03em !important;
-        padding: 9px 26px !important;
+        padding: 9px 24px !important;
         background: rgba(99, 102, 241, 0.14) !important;
         color: #a5b4fc !important;
         border: 1.5px solid #6366f1 !important;
@@ -285,7 +285,7 @@ st.markdown("""
         box-shadow: 0 6px 24px rgba(99, 102, 241, 0.55) !important;
     }
     
-    /* ANCHORED TOP-RIGHT DOWNLOAD BUTTONS */
+    /* ANCHOR DOWNLOAD BUTTONS TO TOP-RIGHT ONLY */
     div[data-testid="stDownloadButton"] {
         display: flex !important;
         justify-content: flex-end !important;
@@ -501,7 +501,7 @@ def read_spreadsheet_robust(uploaded_file):
         
     return df
 
-# --- PERMANENT BULLETPROOF CALLER (NO 1.5, NO 2.0, NO TTS) ---
+# --- PERMANENT BULLETPROOF CALLER ---
 def call_gemini_dynamic(prompt, parts_payload=[]):
     if not api_key_pool:
         raise ValueError("Please enter your Gemini API Key in the left sidebar.")
@@ -773,25 +773,39 @@ nav_tab1, nav_tab2, nav_tab3 = st.tabs([
 ])
 
 # ==============================================================================
-# TAB 1: VISION & REPORT AUDITOR (MULTI-SCREENSHOT DATE COMPARISON)
+# TAB 1: VISION & REPORT AUDITOR (CLEAN BASELINE AUDITOR + SEPARATE COMPARISON DECK)
 # ==============================================================================
 with nav_tab1:
-    st.markdown("#### 📥 Hybrid Data Ingestion (Meta Ads / Google Ads)")
-    st.caption("Upload screenshots or CSV/Excel reports from Meta Ads Manager or Google Ads. The AI will automatically detect the platform and reporting horizon (1D, 7D, 15D, 30D, 90D):")
+    st.markdown("#### 📥 Hybrid Data Ingestion & Comparison Suite")
+    st.caption("Upload screenshots or CSV/Excel reports from Meta Ads Manager or Google Ads. Compare horizons or run instant audits:")
 
-    in_col1, in_col2 = st.columns(2)
+    # 3 COLUMNS: SCREENSHOTS | SPREADSHEETS | COMPARISON ENGINE
+    in_col1, in_col2, in_col3 = st.columns([1, 1, 1.1])
+    
     with in_col1:
         uploaded_imgs = st.file_uploader(
-            "🖼️ Meta / Google Ads Screenshots (Multiple Images Supported)",
+            "🖼️ Meta / Google Screenshots",
             type=["png", "jpg", "jpeg"],
             accept_multiple_files=True
         )
     with in_col2:
         uploaded_csv = st.file_uploader(
-            "📊 Ads Manager / Google Ads Exported CSV or Excel File",
-            type=["csv", "xlsx", "xls"]
+            "📊 Exported CSV or Excel Files",
+            type=["csv", "xlsx", "xls"],
+            accept_multiple_files=True
         )
+    with in_col3:
+        st.markdown("""
+        <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:12px; margin-bottom:8px;">
+            <span class="kpi-lbl" style="color:#818cf8; display:block; margin-bottom:6px;">⚡ Multi-File Comparison Levers</span>
+        """, unsafe_allow_html=True)
+        
+        btn_cmp_dates = st.button("📅 1. Date Horizon Compare")
+        btn_cmp_platforms = st.button("⚔️ 2. Meta vs Google Compare")
+        btn_cmp_fatigue = st.button("📈 3. Deep Fatigue & Delta Audit")
+        st.markdown("</div>", unsafe_allow_html=True)
 
+    # 1. ORIGINAL CLEAN AUTO-DETECTION & AUDIT (REQUEST 1: 100% UNCHANGED)
     if uploaded_imgs or uploaded_csv:
         _, c_btn1, _ = st.columns([1, 2, 1])
         with c_btn1:
@@ -801,7 +815,7 @@ with nav_tab1:
             if not active_api_key:
                 st.error("Please enter your 'Google Gemini API Key' in the left sidebar!")
             else:
-                with st.spinner("🤖 Comparing multiple dates, analyzing metrics, and building directives..."):
+                with st.spinner("🤖 Analyzing metrics and verifying date horizon with live Gemini Flash engine..."):
                     try:
                         payload = []
                         
@@ -815,25 +829,25 @@ with nav_tab1:
                         
                         sheet_text = ""
                         if uploaded_csv:
-                            d_p = read_spreadsheet_robust(uploaded_csv)
-                            sheet_text = f"\nRaw data from spreadsheet:\n{d_p.head(80).to_csv(index=False)}"
+                            for up_csv in uploaded_csv:
+                                d_p = read_spreadsheet_robust(up_csv)
+                                sheet_text += f"\nData from {up_csv.name}:\n{d_p.head(80).to_csv(index=False)}"
 
+                        # ORIGINAL CLEAN PROMPT AS REQUESTED
                         prompt = f"""
                         You are an Elite Senior Performance Marketer for D2C Brand in category: '{selected_category}'.
                         Target AOV is ₹{target_aov}.
-                        Analyze all advertising inputs (Screenshots from Meta Ads / Google Ads or Spreadsheet).
+                        Analyze the advertising input (Screenshots from Meta Ads / Google Ads or Spreadsheet).
                         {sheet_text}
                         
-                        SPECIAL MULTI-SCREENSHOT & DATE-COMPARISON DIRECTIVE:
-                        1. If multiple screenshots or dates are detected, identify the specific date or date range on each image.
-                        2. Compare the chronological progression across dates (tracking spend shifts, CPA trajectory, order changes, and creative fatigue).
-                        3. In 'reason', 'winner', 'bleeder', 'scaling_advice', 'next_action', and 'multi_date_comparison', write strictly in clean sentence case with small letters (avoid excessive all-caps). Keep descriptions concise and summarized.
+                        AUTOMATICALLY DETECT:
+                        1. Advertising Platform: "Meta Ads", "Google Ads", or "Hybrid Meta + Google"
+                        2. Timeframe / Date Horizon: e.g., "1D (Today)", "1D (Yesterday)", "7D (Last 7 Days)", "14/15D (Two Weeks)", "30D (Last Month)", or "90D / Lifetime".
                         
                         Extract all metrics accurately and return a STRICT JSON object in this exact schema:
                         {{
                             "detected_platform": "Meta Ads / Google Ads / Hybrid",
-                            "detected_timeframe": "Chronological range across all screenshots",
-                            "multi_date_comparison": "Brief, high-level comparison of performance trends across the analyzed dates in small letters",
+                            "detected_timeframe": "1D / 7D / 15D / 30D / 90D",
                             "summary": {{
                                 "total_spend": 0.0,
                                 "total_purchases": 0,
@@ -852,17 +866,17 @@ with nav_tab1:
                                     "cpc": 0.0,
                                     "ctr": 0.0,
                                     "decision": "KILL or SCALE or WATCH",
-                                    "reason": "concise reason in small letters"
+                                    "reason": "Short decisive rationale in English"
                                 }}
                             ],
                             "audit_verdict": {{
-                                "winner": "concise winner summary in small letters",
-                                "bleeder": "concise bleeder summary in small letters",
-                                "scaling_advice": "concise budget advice in small letters",
-                                "next_action": "concise next step in small letters"
+                                "winner": "Which ad/campaign is winning and why",
+                                "bleeder": "Which ad/campaign is bleeding money and must be stopped",
+                                "scaling_advice": "Budget scaling advice for tonight",
+                                "next_action": "Tactical roadmap for tomorrow"
                             }}
                         }}
-                        Ensure numbers are mathematically sound. Return ONLY the JSON object.
+                        Ensure numbers are mathematically sound. Calculate missing values if required. Return ONLY the JSON object.
                         """
 
                         raw_res_text = call_gemini_dynamic(prompt, payload)
@@ -875,6 +889,53 @@ with nav_tab1:
                     except Exception as e:
                         st.error(f"Analysis Error: {e}")
 
+        # 2. SEPARATE COMPARISON LOGIC (REQUEST 2: 3 DEDICATED BUTTONS AUTO-SYNCED TO DIRECTIVES)
+        if btn_cmp_dates or btn_cmp_platforms or btn_cmp_fatigue:
+            if not active_api_key:
+                st.error("Please enter your Gemini API Key in the left sidebar!")
+            else:
+                cmp_type_label = "Date Horizon Compare" if btn_cmp_dates else ("Meta vs Google Compare" if btn_cmp_platforms else "Deep Fatigue & Delta Audit")
+                with st.spinner(f"🤖 Running {cmp_type_label} across all uploaded files..."):
+                    try:
+                        cmp_payload = []
+                        if uploaded_imgs:
+                            for img_f in uploaded_imgs:
+                                img = Image.open(img_f)
+                                b_arr = io.BytesIO()
+                                img.convert('RGB').save(b_arr, format='JPEG')
+                                cmp_payload.append(types.Part.from_bytes(data=b_arr.getvalue(), mime_type='image/jpeg'))
+
+                        sheet_dump = ""
+                        if uploaded_csv:
+                            for up_csv in uploaded_csv:
+                                d_p = read_spreadsheet_robust(up_csv)
+                                sheet_dump += f"\nFile {up_csv.name}:\n{d_p.head(80).to_csv(index=False)}"
+
+                        cmp_prompt = f"""
+                        You are an Elite Senior Performance Marketer for D2C brand Sneha B (AOV: ₹{target_aov}).
+                        Perform an aggressive COMPARATIVE AUDIT across all provided files and images.
+                        Comparison Mode: {cmp_type_label}
+                        Data:
+                        {sheet_dump}
+
+                        DIRECTIVE:
+                        1. If comparing dates: track chronological shifts in spend, orders, and CPA degradation.
+                        2. If comparing platforms: contrast Meta Ads efficiency vs Google Ads efficiency.
+                        3. If checking fatigue: isolate creatives where frequency > 2.0 or CPA jumped >50%.
+                        
+                        Write all explanations in clean sentence case with small letters (no aggressive all-caps). Format in tight, clear bullet points:
+                        - Date & Channel breakdown
+                        - Delta Analysis (spend changes, CPA shifts)
+                        - Decisive Media Buyer Verdict on what to kill and what to scale immediately.
+                        """
+                        cmp_result = call_gemini_dynamic(cmp_prompt, cmp_payload)
+                        st.session_state["comparison_sync_report"] = cmp_result
+                        st.session_state["comparison_sync_type"] = cmp_type_label
+                        st.success(f"✓ {cmp_type_label} successfully processed and synced to Senior Media Buyer Directives!")
+                        st.rerun()
+                    except Exception as ce:
+                        st.error(f"Comparison Error: {ce}")
+
     # Display Analyzed Data
     if "auto_analyzed_data" in st.session_state:
         aud_data = st.session_state["auto_analyzed_data"]
@@ -883,7 +944,6 @@ with nav_tab1:
         verd = aud_data.get("audit_verdict", {})
         det_plat = aud_data.get("detected_platform", "Meta Ads")
         det_time = aud_data.get("detected_timeframe", "Auto-Detected")
-        multi_comp = aud_data.get("multi_date_comparison", "")
 
         st.markdown("<div style='margin-top:25px;'></div>", unsafe_allow_html=True)
         
@@ -1041,11 +1101,14 @@ with nav_tab1:
             st.plotly_chart(fig_fc, use_container_width=True)
 
         with aud_t4:
-            if multi_comp:
+            # AUTO-SYNCED MULTI-FILE / MULTI-DATE COMPARISON DIRECTIVES
+            if "comparison_sync_report" in st.session_state:
                 st.markdown(f"""
-                <div style="background:#0f172a; padding:16px; border-radius:10px; border-left:4px solid #818cf8; margin-bottom:12px;">
-                    <b style="color:#a5b4fc; font-family:'Outfit',sans-serif; font-size:14px;">📅 Multi-Date Chronological Trend Analysis:</b><br>
-                    <span style="font-size:13px; color:#cbd5e1;">{multi_comp}</span>
+                <div style="background:#0d1527; padding:18px 22px; border-radius:12px; border-left:4px solid #6366f1; margin-bottom:18px; border:1px solid rgba(99,102,241,0.25);">
+                    <b style="color:#a5b4fc; font-family:'Outfit',sans-serif; font-size:15px;">📊 Auto-Synced Comparative Directive ({st.session_state.get('comparison_sync_type', 'Multi-File')})</b><br>
+                    <div style="font-size:13px; line-height:1.65; color:#cbd5e1; margin-top:6px; white-space:pre-wrap;">
+                        {st.session_state['comparison_sync_report']}
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
                 
@@ -1204,7 +1267,7 @@ with nav_tab1:
                             ### 2. 3-DAY STABILIZATION STEP (Bidding & Budget Guardrails)
                             ### 3. 7-DAY SCALING PROTOCOL to hit {req_roas}x ROAS.
                             
-                            Write in standard sentence case with small letters (avoid excessive all-caps). Format with tight, clean bullet points without unnecessary blank lines.
+                            Format with tight, clean bullet points without unnecessary blank lines.
                             """
                             bridge_res = call_gemini_dynamic(bridge_prompt)
                             st.session_state["live_tactical_plan"] = bridge_res
@@ -1452,7 +1515,7 @@ with nav_tab2:
         """, unsafe_allow_html=True)
 
 # ==============================================================================
-# TAB 3: CREATIVE SCORING & SAFE-ZONE STUDIO (OPTIMIZED BUTTON UNDER PRE-CHECK)
+# TAB 3: CREATIVE SCORING & SAFE-ZONE STUDIO (BUTTON DIRECTLY UNDER PRE-CHECK)
 # ==============================================================================
 with nav_tab3:
     st.markdown("#### 🎨 Creative Scoring & Safe-Zone Studio")
@@ -1480,7 +1543,6 @@ with nav_tab3:
         file_ext = creative_file.name.split('.')[-1].lower()
         is_video = file_ext in ['mp4', 'mov']
         
-        # PERFECTLY BALANCED 1:1.3 COLUMN RATIO
         preview_col, info_col = st.columns([1, 1.3])
         
         with preview_col:
@@ -1506,11 +1568,9 @@ with nav_tab3:
                     detected_ratio = f"{w}x{h} (Ratio {calc_ratio})"
                 res_info = f"{w} × {h} px"
 
-        # DENSE, INFORMATIVE SAAS COCKPIT WITH BUTTON DIRECTLY UNDER PRE-CHECK
         with info_col:
             st.markdown("##### 📐 Technical Specs & Safe-Zone Radar")
             
-            # WIDGET 1: ASSET ATTRIBUTES GRID
             c_attr1, c_attr2 = st.columns(2)
             with c_attr1:
                 st.markdown(f"""
@@ -1531,7 +1591,6 @@ with nav_tab3:
                 </div>
                 """, unsafe_allow_html=True)
 
-            # WIDGET 2: VISUAL SAFE-ZONE RADAR MAP
             st.markdown("""
             <div class="radar-box">
                 <span class="kpi-lbl" style="color:#cbd5e1; margin-bottom:8px; display:block;">🛡️ Mobile Safe-Zone Visual Grid</span>
@@ -1550,7 +1609,6 @@ with nav_tab3:
             </div>
             """, unsafe_allow_html=True)
 
-            # WIDGET 3: LIVE PRE-AUDIT QUALITY CHECKLIST
             st.markdown("""
             <div class="radar-box" style="margin-bottom:12px;">
                 <span class="kpi-lbl" style="color:#cbd5e1; margin-bottom:6px; display:block;">⚡ D2C Conversion Pre-Check</span>
@@ -1562,7 +1620,7 @@ with nav_tab3:
             </div>
             """, unsafe_allow_html=True)
 
-            # BUTTON DIRECTLY UNDER PRE-CHECK BOX (AS REQUESTED)
+            # BUTTON DIRECTLY UNDER PRE-CHECK BOX
             btn_audit_cr = st.button("🚀 AUDIT CREATIVE COMPLIANCE & SCORE PERFORMANCE")
 
         if btn_audit_cr:
