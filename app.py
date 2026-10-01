@@ -113,7 +113,7 @@ D2C_CATEGORIES = {
     }
 }
 
-# --- ULTRA SAAS DESIGN SYSTEM WITH FLAWLESS CENTERED BUTTONS ---
+# --- ULTRA SAAS DESIGN SYSTEM ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
@@ -262,34 +262,22 @@ st.markdown("""
         line-height: 1.6;
     }
     
-    /* 100% BULLETPROOF CENTER ALIGNMENT FOR ALL ACTION BUTTONS */
-    div[data-testid="stButton"] {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        width: 100% !important;
-        text-align: center !important;
-        margin: 12px auto !important;
-    }
-    div[data-testid="stButton"] > button {
-        display: inline-flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        margin: 0 auto !important;
+    /* BORDERED PILL ACTION BUTTONS */
+    .stButton > button {
         border-radius: 9999px !important;
         font-family: 'Outfit', sans-serif !important;
         font-weight: 700 !important;
         font-size: 13px !important;
         letter-spacing: 0.03em !important;
-        padding: 10px 30px !important;
+        padding: 9px 26px !important;
         background: rgba(99, 102, 241, 0.14) !important;
         color: #a5b4fc !important;
         border: 1.5px solid #6366f1 !important;
         box-shadow: 0 4px 18px rgba(99, 102, 241, 0.25) !important;
         transition: all 0.25s ease !important;
-        width: auto !important;
+        width: 100% !important;
     }
-    div[data-testid="stButton"] > button:hover {
+    .stButton > button:hover {
         transform: translateY(-1px) !important;
         background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
         color: #ffffff !important;
@@ -297,7 +285,7 @@ st.markdown("""
         box-shadow: 0 6px 24px rgba(99, 102, 241, 0.55) !important;
     }
     
-    /* ANCHOR DOWNLOAD BUTTONS TO TOP-RIGHT ONLY */
+    /* ANCHORED TOP-RIGHT DOWNLOAD BUTTONS */
     div[data-testid="stDownloadButton"] {
         display: flex !important;
         justify-content: flex-end !important;
@@ -381,15 +369,15 @@ st.markdown("""
         background: rgba(15, 23, 42, 0.6);
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 12px;
-        padding: 14px 18px;
-        margin-bottom: 12px;
+        padding: 12px 16px;
+        margin-bottom: 10px;
     }
     .radar-zone {
-        padding: 8px 12px;
-        border-radius: 8px;
+        padding: 7px 10px;
+        border-radius: 6px;
         font-size: 11px;
         font-weight: 600;
-        margin-bottom: 6px;
+        margin-bottom: 5px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -785,7 +773,7 @@ nav_tab1, nav_tab2, nav_tab3 = st.tabs([
 ])
 
 # ==============================================================================
-# TAB 1: VISION & REPORT AUDITOR
+# TAB 1: VISION & REPORT AUDITOR (MULTI-SCREENSHOT DATE COMPARISON)
 # ==============================================================================
 with nav_tab1:
     st.markdown("#### 📥 Hybrid Data Ingestion (Meta Ads / Google Ads)")
@@ -813,7 +801,7 @@ with nav_tab1:
             if not active_api_key:
                 st.error("Please enter your 'Google Gemini API Key' in the left sidebar!")
             else:
-                with st.spinner("🤖 Analyzing metrics and verifying date horizon with live Gemini Flash engine..."):
+                with st.spinner("🤖 Comparing multiple dates, analyzing metrics, and building directives..."):
                     try:
                         payload = []
                         
@@ -833,17 +821,19 @@ with nav_tab1:
                         prompt = f"""
                         You are an Elite Senior Performance Marketer for D2C Brand in category: '{selected_category}'.
                         Target AOV is ₹{target_aov}.
-                        Analyze the advertising input (Screenshots from Meta Ads / Google Ads or Spreadsheet).
+                        Analyze all advertising inputs (Screenshots from Meta Ads / Google Ads or Spreadsheet).
                         {sheet_text}
                         
-                        AUTOMATICALLY DETECT:
-                        1. Advertising Platform: "Meta Ads", "Google Ads", or "Hybrid Meta + Google"
-                        2. Timeframe / Date Horizon: e.g., "1D (Today)", "1D (Yesterday)", "7D (Last 7 Days)", "14/15D (Two Weeks)", "30D (Last Month)", or "90D / Lifetime".
+                        SPECIAL MULTI-SCREENSHOT & DATE-COMPARISON DIRECTIVE:
+                        1. If multiple screenshots or dates are detected, identify the specific date or date range on each image.
+                        2. Compare the chronological progression across dates (tracking spend shifts, CPA trajectory, order changes, and creative fatigue).
+                        3. In 'reason', 'winner', 'bleeder', 'scaling_advice', 'next_action', and 'multi_date_comparison', write strictly in clean sentence case with small letters (avoid excessive all-caps). Keep descriptions concise and summarized.
                         
                         Extract all metrics accurately and return a STRICT JSON object in this exact schema:
                         {{
                             "detected_platform": "Meta Ads / Google Ads / Hybrid",
-                            "detected_timeframe": "1D / 7D / 15D / 30D / 90D",
+                            "detected_timeframe": "Chronological range across all screenshots",
+                            "multi_date_comparison": "Brief, high-level comparison of performance trends across the analyzed dates in small letters",
                             "summary": {{
                                 "total_spend": 0.0,
                                 "total_purchases": 0,
@@ -862,17 +852,17 @@ with nav_tab1:
                                     "cpc": 0.0,
                                     "ctr": 0.0,
                                     "decision": "KILL or SCALE or WATCH",
-                                    "reason": "Short decisive rationale in English"
+                                    "reason": "concise reason in small letters"
                                 }}
                             ],
                             "audit_verdict": {{
-                                "winner": "Which ad/campaign is winning and why",
-                                "bleeder": "Which ad/campaign is bleeding money and must be stopped",
-                                "scaling_advice": "Budget scaling advice for tonight",
-                                "next_action": "Tactical roadmap for tomorrow"
+                                "winner": "concise winner summary in small letters",
+                                "bleeder": "concise bleeder summary in small letters",
+                                "scaling_advice": "concise budget advice in small letters",
+                                "next_action": "concise next step in small letters"
                             }}
                         }}
-                        Ensure numbers are mathematically sound. Calculate missing values if required. Return ONLY the JSON object.
+                        Ensure numbers are mathematically sound. Return ONLY the JSON object.
                         """
 
                         raw_res_text = call_gemini_dynamic(prompt, payload)
@@ -893,9 +883,11 @@ with nav_tab1:
         verd = aud_data.get("audit_verdict", {})
         det_plat = aud_data.get("detected_platform", "Meta Ads")
         det_time = aud_data.get("detected_timeframe", "Auto-Detected")
+        multi_comp = aud_data.get("multi_date_comparison", "")
 
         st.markdown("<div style='margin-top:25px;'></div>", unsafe_allow_html=True)
         
+        # Responsive Header Bar with Anchored Top-Right Download
         t_c1, t_c2 = st.columns([1.6, 1.4])
         with t_c1:
             st.markdown(f"""
@@ -949,18 +941,18 @@ with nav_tab1:
                     st.markdown("""<div style="background:rgba(244,63,94,0.06); border:1px solid rgba(244,63,94,0.2); border-radius:12px; padding:15px;"><h5 style="color:#fb7185; margin:0 0 10px 0; font-size:14px; font-weight:800;">🛑 IMMEDIATE CAPITAL BLEEDERS (KILL)</h5>""", unsafe_allow_html=True)
                     kills = [a for a in ads_l if "KILL" in str(a.get("decision", "")).upper()]
                     if not kills:
-                        st.markdown("<p style='color:#34d399; font-size:12px;'>✓ No ad is leaking budget</p>", unsafe_allow_html=True)
+                        st.markdown("<p style='color:#34d399; font-size:12px;'>✓ no ad is leaking budget</p>", unsafe_allow_html=True)
                     for k in kills:
-                        st.markdown(f"<p style='font-size:13px; margin:4px 0;'><b>{k.get('ad_name')}</b> — Spend: ₹{k.get('spend')} | <span style='color:#fb7185;'>{k.get('reason')}</span></p>", unsafe_allow_html=True)
+                        st.markdown(f"<p style='font-size:13px; margin:4px 0;'><b>{k.get('ad_name')}</b> — spend: ₹{k.get('spend')} | <span style='color:#fb7185;'>{k.get('reason')}</span></p>", unsafe_allow_html=True)
                     st.markdown("</div>", unsafe_allow_html=True)
                     
                 with ck2:
                     st.markdown("""<div style="background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.2); border-radius:12px; padding:15px;"><h5 style="color:#34d399; margin:0 0 10px 0; font-size:14px; font-weight:800;">🚀 HIGH-EFFICIENCY SCALERS (SCALE)</h5>""", unsafe_allow_html=True)
                     scales = [a for a in ads_l if "SCALE" in str(a.get("decision", "")).upper()]
                     if not scales:
-                        st.markdown("<p style='color:#94a3b8; font-size:12px;'>Scaling requires at least 2 sales and 3x+ ROAS.</p>", unsafe_allow_html=True)
+                        st.markdown("<p style='color:#94a3b8; font-size:12px;'>scaling requires at least 2 sales and 3x+ roas.</p>", unsafe_allow_html=True)
                     for s in scales:
-                        st.markdown(f"<p style='font-size:13px; margin:4px 0;'><b>{s.get('ad_name')}</b> — ROAS: {s.get('roas')}x | <span style='color:#34d399;'>{s.get('reason')}</span></p>", unsafe_allow_html=True)
+                        st.markdown(f"<p style='font-size:13px; margin:4px 0;'><b>{s.get('ad_name')}</b> — roas: {s.get('roas')}x | <span style='color:#34d399;'>{s.get('reason')}</span></p>", unsafe_allow_html=True)
                     st.markdown("</div>", unsafe_allow_html=True)
 
         with aud_t2:
@@ -973,7 +965,6 @@ with nav_tab1:
                 fig_c.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", height=380)
                 st.plotly_chart(fig_c, use_container_width=True)
 
-        # --- FORECASTING SUITE ---
         with aud_t3:
             st.markdown("#### 🔮 Horizon Forecasting Suite (1D, 3D, 7D, 15D, 30D, 90D)")
             st.caption("Forecasting future revenue, target order volumes, and inventory requirements based on active run-rate:")
@@ -1050,24 +1041,29 @@ with nav_tab1:
             st.plotly_chart(fig_fc, use_container_width=True)
 
         with aud_t4:
+            if multi_comp:
+                st.markdown(f"""
+                <div style="background:#0f172a; padding:16px; border-radius:10px; border-left:4px solid #818cf8; margin-bottom:12px;">
+                    <b style="color:#a5b4fc; font-family:'Outfit',sans-serif; font-size:14px;">📅 Multi-Date Chronological Trend Analysis:</b><br>
+                    <span style="font-size:13px; color:#cbd5e1;">{multi_comp}</span>
+                </div>
+                """, unsafe_allow_html=True)
+                
             st.markdown(f"""
             <div style="background:#0f172a; padding:16px; border-radius:10px; border-left:4px solid #10b981; margin-bottom:10px;">
-                <b style="color:#34d399; font-family:'Outfit',sans-serif; font-size:15px;">[+] TOP WINNER:</b><br>{verd.get('winner', 'N/A')}
+                <b style="color:#34d399; font-family:'Outfit',sans-serif; font-size:15px;">[+] TOP WINNER:</b><br>{verd.get('winner', 'n/a')}
             </div>
             <div style="background:#0f172a; padding:16px; border-radius:10px; border-left:4px solid #f43f5e; margin-bottom:10px;">
-                <b style="color:#fb7185; font-family:'Outfit',sans-serif; font-size:15px;">[-] IMMEDIATE BLEEDER (KILL):</b><br>{verd.get('bleeder', 'N/A')}
+                <b style="color:#fb7185; font-family:'Outfit',sans-serif; font-size:15px;">[-] IMMEDIATE BLEEDER (KILL):</b><br>{verd.get('bleeder', 'n/a')}
             </div>
             <div style="background:#0f172a; padding:16px; border-radius:10px; border-left:4px solid #6366f1; margin-bottom:10px;">
-                <b style="color:#818cf8; font-family:'Outfit',sans-serif; font-size:15px;">[*] TONIGHT'S SCALING ACTION:</b><br>{verd.get('scaling_advice', 'N/A')}
+                <b style="color:#818cf8; font-family:'Outfit',sans-serif; font-size:15px;">[*] TONIGHT'S SCALING ACTION:</b><br>{verd.get('scaling_advice', 'n/a')}
             </div>
             <div style="background:#0f172a; padding:16px; border-radius:10px; border-left:4px solid #94a3b8; margin-bottom:10px;">
-                <b style="color:#cbd5e1; font-family:'Outfit',sans-serif; font-size:15px;">[>] TACTICAL ROADMAP:</b><br>{verd.get('next_action', 'N/A')}
+                <b style="color:#cbd5e1; font-family:'Outfit',sans-serif; font-size:15px;">[>] TACTICAL ROADMAP:</b><br>{verd.get('next_action', 'n/a')}
             </div>
             """, unsafe_allow_html=True)
 
-        # ==============================================================================
-        # TAB 5: ROAS BLUEPRINT (PERFECTLY CENTERED ACTION BUTTON)
-        # ==============================================================================
         with aud_t5:
             roas_target_tier = st.radio(
                 "Select Target ROAS Milestone to Scale:",
@@ -1183,7 +1179,6 @@ with nav_tab1:
                     </div>
                     """, unsafe_allow_html=True)
 
-            # 3-COLUMN PYTHON GRID FOR BULLETPROOF CENTERING
             _, c_btn_tactical, _ = st.columns([1, 2, 1])
             with c_btn_tactical:
                 btn_live_tactical = st.button("⚡ GENERATE AI LIVE TACTICAL AUDIT FOR THIS ROAS TARGET")
@@ -1209,7 +1204,7 @@ with nav_tab1:
                             ### 2. 3-DAY STABILIZATION STEP (Bidding & Budget Guardrails)
                             ### 3. 7-DAY SCALING PROTOCOL to hit {req_roas}x ROAS.
                             
-                            Format with tight, clean bullet points without unnecessary blank lines.
+                            Write in standard sentence case with small letters (avoid excessive all-caps). Format with tight, clean bullet points without unnecessary blank lines.
                             """
                             bridge_res = call_gemini_dynamic(bridge_prompt)
                             st.session_state["live_tactical_plan"] = bridge_res
@@ -1339,7 +1334,6 @@ with nav_tab2:
         "cvr": b_cvr
     }
 
-    # 3-COLUMN PYTHON GRID FOR BULLETPROOF CENTERING
     _, c_btn_copy, _ = st.columns([1, 2, 1])
     with c_btn_copy:
         btn_copy_gen = st.button(f"⚡ GENERATE STEP-BY-STEP SETTINGS & AD ASSETS FOR {platform_choice.split(' ')[1].upper()}")
@@ -1458,7 +1452,7 @@ with nav_tab2:
         """, unsafe_allow_html=True)
 
 # ==============================================================================
-# TAB 3: CREATIVE SCORING & SAFE-ZONE STUDIO (PERFECTLY BALANCED COLUMNS)
+# TAB 3: CREATIVE SCORING & SAFE-ZONE STUDIO (OPTIMIZED BUTTON UNDER PRE-CHECK)
 # ==============================================================================
 with nav_tab3:
     st.markdown("#### 🎨 Creative Scoring & Safe-Zone Studio")
@@ -1486,7 +1480,7 @@ with nav_tab3:
         file_ext = creative_file.name.split('.')[-1].lower()
         is_video = file_ext in ['mp4', 'mov']
         
-        # PERFECTLY BALANCED 1:1.3 COLUMN RATIO TO ELIMINATE VOID
+        # PERFECTLY BALANCED 1:1.3 COLUMN RATIO
         preview_col, info_col = st.columns([1, 1.3])
         
         with preview_col:
@@ -1512,7 +1506,7 @@ with nav_tab3:
                     detected_ratio = f"{w}x{h} (Ratio {calc_ratio})"
                 res_info = f"{w} × {h} px"
 
-        # DENSE, INFORMATIVE SAAS COCKPIT (NO EMPTY SPACE)
+        # DENSE, INFORMATIVE SAAS COCKPIT WITH BUTTON DIRECTLY UNDER PRE-CHECK
         with info_col:
             st.markdown("##### 📐 Technical Specs & Safe-Zone Radar")
             
@@ -1558,7 +1552,7 @@ with nav_tab3:
 
             # WIDGET 3: LIVE PRE-AUDIT QUALITY CHECKLIST
             st.markdown("""
-            <div class="radar-box" style="margin-bottom:0;">
+            <div class="radar-box" style="margin-bottom:12px;">
                 <span class="kpi-lbl" style="color:#cbd5e1; margin-bottom:6px; display:block;">⚡ D2C Conversion Pre-Check</span>
                 <div style="font-size:11px; line-height:1.7; color:#94a3b8;">
                     • <b>Thumbstop Window:</b> First 2 seconds must interrupt feed scroll.<br>
@@ -1568,9 +1562,7 @@ with nav_tab3:
             </div>
             """, unsafe_allow_html=True)
 
-        # 3-COLUMN PYTHON GRID FOR BULLETPROOF CENTERING
-        _, c_btn_audit_cr, _ = st.columns([1, 2, 1])
-        with c_btn_audit_cr:
+            # BUTTON DIRECTLY UNDER PRE-CHECK BOX (AS REQUESTED)
             btn_audit_cr = st.button("🚀 AUDIT CREATIVE COMPLIANCE & SCORE PERFORMANCE")
 
         if btn_audit_cr:
@@ -1600,25 +1592,25 @@ with nav_tab3:
 
                         TASK:
                         Evaluate this creative against Meta Ads (Instagram Reels, Stories, Feeds) and Google Ads compliance and conversion rules.
-                        Scoring instructions: Evaluate on a 1-10 scale. Center all scores around 5-7 (avoid extreme 1 or 10 scores). Keep all explanations concise and summarized, reducing verbosity by 50%.
+                        Scoring instructions: Evaluate on a 1-10 scale. Center all scores around 5-7 (avoid extreme 1 or 10 scores). Keep all explanations concise and summarized, reducing verbosity by 50%. Write in small letters / sentence case.
                         
                         Return a STRICT JSON object in this exact schema:
                         {{
                             "overall_score": 6.8,
                             "redesigned_score": 8.4,
                             "aspect_ratio": "{detected_ratio}",
-                            "safe_zone_verdict": "Clear pass or warning summary",
+                            "safe_zone_verdict": "clear pass or warning summary",
                             "scores": {{
                                 "hook_strength": 6.5,
                                 "safe_zone_clearance": 7.0,
                                 "visual_clarity": 7.2,
                                 "roas_potential": 6.8
                             }},
-                            "safe_zone_critique": "Brief assessment of text overlay position vs UI buttons",
+                            "safe_zone_critique": "brief assessment of text overlay position vs ui buttons in small letters",
                             "roas_improvements": [
-                                "Concise high-level lever 1",
-                                "Concise high-level lever 2",
-                                "Concise high-level lever 3"
+                                "concise high-level lever 1",
+                                "concise high-level lever 2",
+                                "concise high-level lever 3"
                             ]
                         }}
                         Respond ONLY with the JSON object.
@@ -1656,7 +1648,7 @@ with nav_tab3:
             st.markdown(f"""
             <div class="deck-card">
                 <h5 style="color:#818cf8; margin-top:0;">🛡️ Safe-Zone & UI Overlay Analysis</h5>
-                <p style="font-size:13px; line-height:1.5;">{c_res.get('safe_zone_critique', 'Safe-zone analyzed.')}</p>
+                <p style="font-size:13px; line-height:1.5;">{c_res.get('safe_zone_critique', 'safe-zone analyzed.')}</p>
                 <span class="kpi-pill pill-blue">Status: {c_res.get('safe_zone_verdict', 'Pass')}</span>
             </div>
             """, unsafe_allow_html=True)
@@ -1696,7 +1688,7 @@ with nav_tab3:
 
                         TASK:
                         Redesign the textual and visual layout of this creative to maximize compliance and conversions (Target Score: {c_res.get('redesigned_score', 8.4)} / 10).
-                        Keep narrative concise, focusing on direct directives:
+                        Write all explanations and reasons in clean sentence case with small letters. Keep narrative concise, focusing on direct directives:
 
                         ### 🎯 1. REDESIGNED ON-SCREEN TEXT & SAFE-ZONE COORDINATES
                         - Main Headline (Keep under 6 words, high pattern-interrupt).
