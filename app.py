@@ -58,7 +58,7 @@ D2C_CATEGORIES = {
     "🎧 Consumer Tech & Gadgets": {"aov": 2600, "cpm": 280, "ctr": 1.5, "cvr": 1.7, "cpc": 18.6, "rto": 24, "target_roas": 3.5, "usp": "Fast charging, active noise isolation."}
 }
 
-# --- 4. ULTRA SAAS CSS (BUTTON PILLS & CENTERED ALIGNMENT) ---
+# --- 4. ULTRA SAAS CSS ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
@@ -91,7 +91,7 @@ st.markdown("""
     }
     div[data-testid="stTabs"] [data-baseweb="tab-highlight"], div[data-testid="stTabs"] [data-baseweb="tab-border"] { display: none !important; }
     
-    /* Cards */
+    /* KPI Cards */
     .kpi-card {
         background: linear-gradient(135deg, rgba(30,41,59,0.35) 0%, rgba(15,23,42,0.6) 100%);
         border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px;
@@ -122,14 +122,47 @@ st.markdown("""
         color: #ffffff !important; border: 1px solid rgba(255,255,255,0.2) !important; white-space: nowrap !important;
     }
     
-    /* Clickable Comparison Chips Container */
-    div[data-testid="stVerticalBlockBorderWrapper"] {
-        background: linear-gradient(135deg, rgba(30,41,59,0.4) 0%, rgba(15,23,42,0.7) 100%) !important;
-        border: 1px solid rgba(255,255,255,0.09) !important; border-radius: 14px !important; padding: 12px 14px !important;
+    /* MATCHING THICKNESS FOR MULTI-FILE COMPARISON CONTAINER */
+    div[data-testid="column"]:nth-of-type(3) div[data-testid="stVerticalBlockBorderWrapper"] {
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 10px !important;
+        padding: 8px 10px !important;
+        min-height: 125px !important;
+        max-height: 130px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        gap: 3px !important;
     }
-    div[data-testid="stVerticalBlockBorderWrapper"] div[data-testid="stButton"] > button {
-        border-radius: 20px !important; padding: 6px 14px !important; font-size: 11.5px !important;
-        width: 100% !important; justify-content: flex-start !important; text-align: left !important;
+    
+    /* SMALL THIN CLICKABLE CHIPS */
+    div[data-testid="column"]:nth-of-type(3) div[data-testid="stButton"] {
+        margin: 2px 0 !important;
+    }
+    div[data-testid="column"]:nth-of-type(3) div[data-testid="stButton"] > button {
+        border-radius: 20px !important;
+        padding: 4px 12px !important;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.01em !important;
+        background: rgba(99, 102, 241, 0.08) !important;
+        border: 1px solid rgba(99, 102, 241, 0.3) !important;
+        color: #cbd5e1 !important;
+        width: 100% !important;
+        height: 28px !important;
+        min-height: 28px !important;
+        box-shadow: none !important;
+        display: flex !important;
+        justify-content: flex-start !important;
+        text-align: left !important;
+        transition: all 0.15s ease !important;
+    }
+    div[data-testid="column"]:nth-of-type(3) div[data-testid="stButton"] > button:hover {
+        background: rgba(99, 102, 241, 0.22) !important;
+        border-color: #818cf8 !important;
+        color: #ffffff !important;
+        transform: none !important;
     }
     
     /* Text Deck Formatting */
@@ -262,15 +295,14 @@ with nav_tab1:
     with in_col2:
         up_csvs = st.file_uploader("📊 Exported CSV or Excel Files", type=["csv", "xlsx", "xls"], accept_multiple_files=True)
     with in_col3:
-        # CLICKABLE CHIPS ENCLOSED CLEANLY INSIDE CONTAINER
+        st.markdown("<p style='font-size:14px; font-weight:600; margin-bottom:8px;'>⚡ Multi-File Comparison</p>", unsafe_allow_html=True)
+        # NATIVE CONTAINER MATCHING DROPZONE THICKNESS WITH SLIM CLICKABLE CHIPS
         with st.container(border=True):
-            st.markdown("<span class='kpi-lbl' style='color:#818cf8; display:block; margin-bottom:8px;'>⚡ MULTI-FILE COMPARISON LEVERS</span>", unsafe_allow_html=True)
             btn_cmp_dates = st.button("📅 Date Horizon (1D vs 7D vs 30D)", key="cmp1")
             btn_cmp_platforms = st.button("⚔️ Meta vs Google Cross-Audit", key="cmp2")
             btn_cmp_fatigue = st.button("📈 Creative Fatigue & Delta", key="cmp3")
 
     if up_imgs or up_csvs:
-        # CENTERED MAIN AUDIT BUTTON
         _, c_btn1, _ = st.columns([1, 2, 1])
         with c_btn1:
             btn_audit = st.button("🚀 EXECUTE AUTO-DETECTION & AUDIT")
@@ -410,7 +442,6 @@ with nav_tab2:
     f4.metric("Clicks Needed", f"{req_clk:,}")
     f5.metric("Views Needed", f"{req_view:,}")
 
-    # CENTERED COPY BUTTON
     _, c_btn2, _ = st.columns([1, 2, 1])
     with c_btn2:
         btn_gen_copy = st.button(f"⚡ GENERATE ASSETS FOR {p_choice.split(' ')[1].upper()}")
@@ -471,7 +502,6 @@ with nav_tab3:
                 • <b>Contrast Rule:</b> Text must have high-contrast background pill.
             </div>""", unsafe_allow_html=True)
 
-            # BUTTON PLACED DIRECTLY UNDER PRE-CHECK BOX (AS REQUESTED)
             btn_audit_cr = st.button("🚀 AUDIT CREATIVE COMPLIANCE & SCORE PERFORMANCE")
 
         if btn_audit_cr:
@@ -507,7 +537,6 @@ with nav_tab3:
         st.markdown(f"##### 📊 Grade: `{st.session_state.get('cr_name')}` | Score: **{ev.get('overall_score')} / 10**")
         st.markdown(f"<div class='deck-card'><b>Safe-Zone Critique:</b> {ev.get('safe_zone_critique','')}<br><br><b>Key ROAS Improvements:</b><br>• " + "<br>• ".join(ev.get("roas_improvements", [])) + "</div>", unsafe_allow_html=True)
 
-        # CENTERED REDESIGN BUTTON
         _, c_btn3, _ = st.columns([1, 2, 1])
         with c_btn3:
             btn_redesign = st.button("✨ REDESIGN TEXT & OPTIMIZE FOR MAXIMUM SCORE")
